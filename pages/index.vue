@@ -43,7 +43,9 @@
 
       <v-dialog v-model="dialog" scrollable width="auto" persistent>
         <v-card>
-          <v-card-title>Edit task</v-card-title>
+          <v-card-title>{{
+            !isEdit ? "Create task" : "Edit task"
+          }}</v-card-title>
           <v-divider></v-divider>
           <v-card-text style="height: 400px">
             <v-form ref="formTask" @submit.prevent="createTasks">
