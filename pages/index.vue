@@ -212,7 +212,7 @@ export default {
         { text: "Title", align: "start", value: "title" },
         { text: "Due date", align: "start", value: "due_date" },
         {
-          text: "Complete",
+          text: "Completed",
           align: "start",
           value: "is_completed",
         },
@@ -227,7 +227,7 @@ export default {
         (value) => {
           if (value) return true;
 
-          return "Value is requred.";
+          return "Title is requred.";
         },
       ],
       snackbar: false,
