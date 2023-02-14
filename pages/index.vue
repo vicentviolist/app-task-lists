@@ -96,12 +96,16 @@
                         scrollable
                       >
                         <v-spacer></v-spacer>
-                        <v-btn text color="primary" @click="menu = false">
+                        <v-btn
+                          text
+                          color="primary darken-2"
+                          @click="menu = false"
+                        >
                           Cancel
                         </v-btn>
                         <v-btn
                           text
-                          color="primary"
+                          color="primary darken-2"
                           @click="$refs.menu.save(filterData.due_date)"
                         >
                           OK
@@ -159,6 +163,7 @@
                 class="ml-3"
                 variant="text"
                 @click="createTasks"
+                v-on:keyup.enter="createTasks"
               >
                 Save
               </v-btn>
