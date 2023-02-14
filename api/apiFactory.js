@@ -1,6 +1,7 @@
 import api from "./index";
 import { transformToParamsString } from "./utils/apiUtils";
-
+const token =
+  "?token=e864a0c9eda63181d7d65bc73e61e3dc6b74ef9b82f7049f1fc7d9fc8f29706025bd271d1ee1822b15d654a84e1a0997b973a46f923cc9977b3fcbb064179ecd";
 const path = "tasks";
 //Note:Se crean los metods CRUD que se utilizaran a lo largo del proyecto
 export default {
@@ -11,7 +12,7 @@ export default {
     query = transformToParamsString(query);
     return new Promise((resolve, reject) => {
       api
-        .get(`${path}${payload.path}${query}`, config)
+        .get(`${path}${payload.path}${query}${token}`, config)
         .then((response) => {
           resolve(response);
         })
@@ -22,30 +23,20 @@ export default {
   },
   async posts(payload) {
     var config = {
-      headers: {
+      /* headers: {
         common: {
           Authorization:
             "Bearer " +
             "e864a0c9eda63181d7d65bc73e61e3dc6b74ef9b82f7049f1fc7d9fc8f29706025bd271d1ee1822b15d654a84e1a0997b973a46f923cc9977b3fcbb064179ecd",
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        //Note: la funcion transformToParamsString ya da la funcion similar a la comentada abajo
-        /*  transformRequest: [
-          function (data) {
-            const params = new URLSearchParams();
-            for (const key in data) {
-              params.append(key, data[key]);
-            }
-            return params.toString();
-          },
-        ], */
-      },
+      }, */
     };
     let { query } = payload;
     query = transformToParamsString(query);
     return new Promise((resolve, reject) => {
       api
-        .post(`${path}${query}`, payload.data, config)
+        .post(`${path}${query}${token}`, payload.data, config)
         .then((response) => {
           resolve(response);
         })
@@ -59,7 +50,7 @@ export default {
     return new Promise((resolve, reject) => {
       console.log(payload, "payload.path");
       api
-        .delete(`${path}${payload.path}`, config)
+        .delete(`${path}${payload.path}${token}`, config)
         .then((response) => {
           resolve(response);
         })
@@ -74,7 +65,7 @@ export default {
     query = transformToParamsString(query);
     return new Promise((resolve, reject) => {
       api
-        .put(`${path}${payload.path}${query}`, payload.data, config)
+        .put(`${path}${payload.path}${query}${token}`, payload.data, config)
         .then((response) => {
           resolve(response);
         })

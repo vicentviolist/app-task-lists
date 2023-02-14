@@ -10,6 +10,7 @@
     <v-row>
       <v-col>
         <v-data-table
+          height="auto"
           :headers="headers"
           :loading="loading"
           :items="task"
@@ -292,14 +293,15 @@ export default {
         let payload = { path: "/" + this.idTask };
         let res = await this.$store.dispatch("deleteTask", payload);
         this.colorAlert = "success";
-        this.snackbar = "The task was successfully deleted";
-        this.textAlert = error;
+        this.snackbar = true;
+        this.textAlert = "The task was successfully deleted";
       } catch (error) {
         this.colorAlert = "error";
         this.snackbar = true;
         this.textAlert = error;
       } finally {
         this.asyncData();
+        this.closeDetail();
       }
     },
     closeDetail() {

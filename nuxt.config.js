@@ -26,7 +26,7 @@ export default {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
-  // NOTE: Encontre una forma mejor de declarar las opciones de axios.
+  // NOTE: Se usara archivo aparte para tener acceso a las opciones de axios.
   /* axios: {
     baseURL: "https://ecsdevapi.nextline.mx/vdev/tasks-challenge/tasks",
     headers: {
