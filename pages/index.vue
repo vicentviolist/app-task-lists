@@ -2,7 +2,9 @@
   <div>
     <v-row>
       <v-col class="mt-2">
-        <v-btn @click="dialog = true" color="primary darken-2">Add task</v-btn>
+        <v-btn @click="dialog = true" color="primary darken-2"
+          >+ Add task</v-btn
+        >
       </v-col>
     </v-row>
     <v-row>
@@ -26,7 +28,12 @@
             </v-chip>
           </template>
           <template v-slot:item.is_completed="item">
-            <div class="mr-2">
+            <div
+              class="mr-2"
+              :class="
+                item.item.is_completed == 1 ? 'success--text' : 'error--text'
+              "
+            >
               {{ item.item.is_completed == 1 ? "Completed" : "Incomplete" }}
             </div>
           </template>
@@ -38,7 +45,7 @@
           <v-card-title>Edit task</v-card-title>
           <v-divider></v-divider>
           <v-card-text style="height: 400px">
-            <v-form ref="formTask" @submit.prevent>
+            <v-form ref="formTask" @submit.prevent="createTasks">
               <v-container>
                 <v-row>
                   <v-col cols="12" md="6">
@@ -150,7 +157,7 @@
                 color="primary darken-2"
                 class="ml-3"
                 variant="text"
-                @click="submit()"
+                @click="createTasks"
               >
                 Save
               </v-btn>
@@ -192,6 +199,7 @@ export default {
     return {
       loading: false,
       isEdit: false,
+      //Note: Orden de los encabezados de la tabla
       headers: [
         { text: "Title", align: "start", value: "title" },
         { text: "Due date", align: "start", value: "due_date" },
@@ -206,6 +214,7 @@ export default {
           value: "id",
         },
       ],
+      date: null,
       rulesRequired: [
         (value) => {
           if (value) return true;
@@ -227,6 +236,7 @@ export default {
       dialog: false,
       deleteConfirm: false,
       textAlert: "",
+      //Note: la variable menu alimenta al calendario dentro del input haciendo que se vea o no al darchick
       menu: false,
       colorAlert: "success",
     };
@@ -236,6 +246,7 @@ export default {
     this.asyncData();
   },
   computed: {
+    //Note: Se leera a travez de una variable computada el data de la tablaque previamente se muto en el store
     ...mapState(["task"]),
   },
   methods: {
@@ -247,6 +258,7 @@ export default {
         await this.$store.dispatch("getTaskData", payload);
         console.log(this.task, "task");
       } catch (error) {
+        //Note: buen manejo de mensajes de error si estos llegan a surgir
         this.colorAlert = "error";
         this.snackbar = true;
         this.textAlert = error;
@@ -256,9 +268,11 @@ export default {
     },
     async detailTask(id) {
       try {
+        //Note: Se llama al dar click en edit de la tabla y nos guarda el id en una variable global
         this.isEdit = true;
         this.idTask = id;
         let payload = { query: {}, path: "/" + this.idTask };
+        // Peticion pra traer el detalle de una tarea a la vez
         let res = await this.$store.dispatch("getTaskId", payload);
         this.filterData = { ...res.data[0] };
         this.dialog = true;
@@ -269,11 +283,12 @@ export default {
       }
     },
     confirmDelete() {
+      //Note: esto abrira una modal con un mensaje de confirmacion antes de eliminnar cualquier registro
       this.deleteConfirm = true;
     },
     async deleteTask() {
       try {
-        console.log(this.idTask, "this.idTask ");
+        //Note se utiliza this.idTask que trae guardada previamente el id de la tarea que se abre en el momento de detallle
         let payload = { path: "/" + this.idTask };
         let res = await this.$store.dispatch("deleteTask", payload);
         this.colorAlert = "success";
@@ -294,37 +309,48 @@ export default {
       this.isEdit = false;
       this.filterData = this.filterDataAux;
     },
-    async submit() {
+    async createTasks() {
       try {
         // Note: se envian todos los parametros dentro del v-model de la creacion de tareas para optenerla una vez consumimos su API
         let payload = {
           data: { ...this.filterData },
         };
-        if (this.isEdit) {
-          // Note: dentro de payload se envia el path y data para hacer el put de forma correcta
-          // Utilizamos el id de la tarea que declaramos en this.idTask al momento de abrir el detalle de esta
-          // Solo entrara cuando estemos en modo edicion de tareas
-          payload = {
-            data: { ...this.filterData },
-            path: "/" + this.idTask,
-          };
-          await this.$store.dispatch("updateTask", payload);
-          this.colorAlert = "success";
+        if (this.filterData.title == null || this.filterData.title == "") {
+          this.colorAlert = "error";
           this.snackbar = true;
-          this.textAlert = "The task was updated successfully";
-        } else if (!this.isEdit) {
-          await this.$store.dispatch("addTask", payload);
-          this.colorAlert = "success";
-          this.snackbar = true;
-          this.textAlert = "The task was created successfully";
+          this.textAlert = "the title field must be different from null";
+        } else {
+          if (this.isEdit) {
+            // Note: dentro de payload se envia el path y data para hacer el put de forma correcta
+            // Utilizamos el id de la tarea que declaramos en this.idTask al momento de abrir el detalle de esta
+            // Solo entrara cuando estemos en modo edicion de tareas
+            payload = {
+              data: { ...this.filterData },
+              path: "/" + this.idTask,
+            };
+            await this.$store.dispatch("updateTask", payload);
+            this.colorAlert = "success";
+            this.snackbar = true;
+            this.textAlert = "The task was updated successfully";
+            this.closeDetail();
+            this.asyncData();
+          } else if (!this.isEdit) {
+            await this.$store.dispatch("addTask", payload);
+            //Note: mensajes de ok al editar o crear tarea utilizando componente snackbar.
+            this.colorAlert = "success";
+            this.snackbar = true;
+            this.textAlert = "The task was created successfully";
+            this.closeDetail();
+            this.asyncData();
+          }
         }
       } catch (error) {
         this.colorAlert = "error";
         this.snackbar = true;
         this.textAlert = error;
-      } finally {
         this.closeDetail();
         this.asyncData();
+      } finally {
       }
     },
   },

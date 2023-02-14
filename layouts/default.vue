@@ -43,12 +43,14 @@ export default {
   name: "DefaultLayout",
   data() {
     return {
+      //Se utilizara la configuracion basica del layout de nuxt debido a que es bastante funcional para lo requerido
+      //Solo se haran muy pocas modificaicones
       clipped: true,
       drawer: false,
       fixed: false,
       items: [
         {
-          icon: "mdi-apps",
+          icon: "mdi-home",
           title: "Task list",
           to: "/",
         },

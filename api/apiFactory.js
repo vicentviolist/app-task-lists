@@ -2,9 +2,10 @@ import api from "./index";
 import { transformToParamsString } from "./utils/apiUtils";
 
 const path = "tasks";
-
+//Note:Se crean los metods CRUD que se utilizaran a lo largo del proyecto
 export default {
   async gets(payload) {
+    //Note: en el objeto config se pueden meter los heders por si fuera necesario utilizar otro metodo de autentificacion en un metodo en especifico
     var config = {};
     let { query } = payload;
     query = transformToParamsString(query);
@@ -28,7 +29,8 @@ export default {
             "e864a0c9eda63181d7d65bc73e61e3dc6b74ef9b82f7049f1fc7d9fc8f29706025bd271d1ee1822b15d654a84e1a0997b973a46f923cc9977b3fcbb064179ecd",
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        transformRequest: [
+        //Note: la funcion transformToParamsString ya da la funcion similar a la comentada abajo
+        /*  transformRequest: [
           function (data) {
             const params = new URLSearchParams();
             for (const key in data) {
@@ -36,7 +38,7 @@ export default {
             }
             return params.toString();
           },
-        ],
+        ], */
       },
     };
     let { query } = payload;
