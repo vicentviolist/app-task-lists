@@ -264,7 +264,6 @@ export default {
         this.loading = true;
         let payload = { query: {}, path: "" };
         await this.$store.dispatch("getTaskData", payload);
-        console.log(this.task, "task");
       } catch (error) {
         //Note: buen manejo de mensajes de error si estos llegan a surgir
         this.colorAlert = "error";

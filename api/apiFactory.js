@@ -48,7 +48,6 @@ export default {
   async deletes(payload) {
     var config = {};
     return new Promise((resolve, reject) => {
-      console.log(payload, "payload.path");
       api
         .delete(`${path}${payload.path}${token}`, config)
         .then((response) => {

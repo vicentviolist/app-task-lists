@@ -16,8 +16,6 @@ export const actions = {
   //Note: peticion que traera la consulta que llena la tabla
   async getTaskData({ commit }, payload) {
     let res = await getTask(payload);
-    console.log(res, "res");
-    commit("settask", res.data);
   },
   //Note: traera registro uno a uno para llenar inf de detalle
   async getTaskId({ commit }, payload) {
